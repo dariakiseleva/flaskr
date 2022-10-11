@@ -5,7 +5,7 @@ from flask import current_app, g
 # A connection to the database is created when handling the request, and closed before sending the response
 
 
-def geb_db():
+def get_db():
     # "g" is an object unique for each request, stores data accessed during the request
     # The connection is stored and can be reused if called again in the same request
     if "db" not in g:
@@ -25,3 +25,19 @@ def close_db(e=None):
     db = g.pop("db", None)
     if db is not None:
         db.close()
+
+
+def init_db():
+    # Open the schema file (relative to the flaskr package)
+    # Execute the script in the file on the database connection
+    db = get_db()
+    with current_app.open_resource("schema.sql") as f:
+        db.executescript(f.read().decode("utf8"))
+
+
+# Creates a command line command "init_db"
+@click.command("init-db")
+# Clear existing tables, re-create empty tables
+def init_db_command():
+    init_db()
+    click.echo("Initialized the database")
