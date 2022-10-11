@@ -1,5 +1,7 @@
 venv/
 
+WORKNOTES.md
+
 *.pyc
 __pycache__/
 
