@@ -5,6 +5,7 @@ from flask import Flask
 
 # ---The "application factory" function which return the app
 # (For configuration, registration, and other setup)
+# Note: Since using a factory function, the instance of the Flask app itself is not available
 
 
 def create_app(test_config=None):
@@ -38,5 +39,10 @@ def create_app(test_config=None):
     @app.route("/hello")
     def hello():
         return "Hello, Daria!"
+
+    # Call the init_app function on the app -> this tells the app to run close_db when after each response, and adds a CLI command to init the db
+    from . import db
+
+    db.init_app(app)
 
     return app

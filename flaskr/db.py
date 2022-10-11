@@ -41,3 +41,13 @@ def init_db():
 def init_db_command():
     init_db()
     click.echo("Initialized the database")
+
+
+# -----
+
+
+def init_app(app):
+    # Have the app call close_db after returning a response
+    app.teardown_appcontext(close_db)
+    # Add the init-db command to be called with the flask command
+    app.cli.add_command(init_db_command)
