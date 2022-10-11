@@ -16,7 +16,7 @@ def create_app(test_config=None):
 
     # Default configuration of the app
     # Secret key keeps data safe, 'dev' should be overriden with a random value when deploying
-    # The SQLite database is under the Flask instance folder
+    # The SQLite database is under the Flask instance folder (called 'instance')
     app.config.from_mapping(
         SECRET_KEY="dev", DATABASE=os.path.join(app.instance_path, "flaskr.sqlite")
     )
