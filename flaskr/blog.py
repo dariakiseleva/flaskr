@@ -96,3 +96,13 @@ def update(id):
 
     # Display the update page with retrieved post details
     return render_template("blog/update.html", post=post)
+
+
+@bp.route("/<int:id>/delete", methods=("POST",))
+@login_required
+def delete(id):
+    # get_post(id) --> This is not needed?
+    db = get_db()
+    db.execute("DELETE FROM post WHERE id = ?", (id,))
+    db.commit()
+    return redirect(url_for("blog.index"))
