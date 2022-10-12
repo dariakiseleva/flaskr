@@ -68,7 +68,7 @@ def login():
         # Return one row based on the query, or None if nothing matches
         user = db.execute(
             "SELECT * FROM user WHERE username = ?", (username,)
-        ).getchone()
+        ).fetchone()
 
         if user is None:
             error = "Incorrect username."
