@@ -1,7 +1,5 @@
 import os
-
 from flask import Flask
-
 
 # ---The "application factory" function which return the app
 # (For configuration, registration, and other setup)
