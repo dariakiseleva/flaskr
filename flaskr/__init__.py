@@ -46,8 +46,13 @@ def create_app(test_config=None):
     db.init_app(app)
 
     # Register blueprints
-    from . import auth
+    from . import auth, blog
 
     app.register_blueprint(auth.bp)
+    app.register_blueprint(blog.bp)
+
+    # Associate a view with a url of a different name
+    # url_for('index') and url_for('blog.index') both generate the '/' URL
+    app.add_url_rule("/", endpoint="index")
 
     return app
