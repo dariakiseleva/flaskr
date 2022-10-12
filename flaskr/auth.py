@@ -55,3 +55,47 @@ def register():
 
     # If navigating to auth/register (GET)
     return render_template("auth/register.html")
+
+
+@bp.route("/login", methods=("GET", "POST"))
+def login():
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
+        db = get_db()
+        error = None
+
+        # Return one row based on the query, or None if nothing matches
+        user = db.execute(
+            "SELECT * FROM user WHERE username = ?", (username,)
+        ).getchone()
+
+        if user is None:
+            error = "Incorrect username."
+        elif not check_password_hash(user["password"], password):
+            error = "Incorrect password"
+
+        # Session is a dictionary that stores data in a cookie
+        if error is None:
+            session.clear()
+            session["user_id"] = user["id"]
+            return redirect(url_for("index"))
+
+        flash(error)
+
+    return render_template("auth/login.html")
+
+
+# The function runs before any view function in the vlueprint
+# Based on the id stored in the cookie, get the user's data from the database
+# Store the data in g.user which lasts for the length of the request
+@bp.before_app_request
+def load_logged_in_user():
+    user_id = session.get("user_id")
+
+    if user_id is None:
+        g.user = None
+    else:
+        g.user = (
+            get_db().execute("SELECT * FROM user WHERE id = ?", (user_id,)).fetchone()
+        )
