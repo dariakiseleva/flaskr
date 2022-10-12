@@ -86,6 +86,12 @@ def login():
     return render_template("auth/login.html")
 
 
+@bp.route("/logout")
+def logout():
+    session.clear()
+    return redirect(url_for("index"))
+
+
 # The function runs before any view function in the vlueprint
 # Based on the id stored in the cookie, get the user's data from the database
 # Store the data in g.user which lasts for the length of the request
